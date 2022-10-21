@@ -1,6 +1,6 @@
 ## web scraping simple example
 
-`run` with `node index.js`
+`run` with `npm run dev`
 
 ## Developer
 

@@ -1,11 +1,21 @@
+import express from "express";
+import cors from "cors";
 import { load } from "cheerio";
 import axios from "axios";
 import { Parser } from "json2csv";
 import fs from "fs";
 
+const app = express();
+
+app.use(cors());
+
+app.use(express.json());
+
 const baseUrl = "https://www.jumia.com.eg/laptops/";
 
 const laptopsData = [];
+
+let port = process.env.PORT || 4800;
 
 async function getLaptops(url) {
   try {
@@ -44,4 +54,14 @@ async function getLaptops(url) {
   }
 }
 
-getLaptops(baseUrl);
+app.get("/scraping", async (req, res) => {
+  try {
+    await getLaptops(baseUrl);
+    return res.status(200).json({ msg: "file exported successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ err: error });
+  }
+});
+
+app.listen(port, () => console.log("Scrapper is running on " + port));
